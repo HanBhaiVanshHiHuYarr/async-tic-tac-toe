@@ -17,7 +17,8 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
 	cors: {
-		origin: ["https://async-tic-tac-toe-two.vercel.app/"],
+		origin: "https://async-tic-tac-toe-two.vercel.app",
+		methods: ["GET", "POST", "PUT"],
 	},
 });
 //config
@@ -52,9 +53,7 @@ io.on("connection", (socket) => {
 		socket
 			.in(newMessageReceived.turn)
 			.emit("message received", newMessageReceived);
-    });
-    
-    
+	});
 });
 
 httpServer.listen(port, console.log(`Server running on ${port}`.bgYellow.bold));
