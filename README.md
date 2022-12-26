@@ -6,7 +6,7 @@ Asynchronous tic tac toe is a multiplayer game that can be played in real time. 
 
 ## Demo
 
-Insert gif or link to demo
+https://async-tic-tac-toe-two.vercel.app/game
 
 
 ## Screenshots
