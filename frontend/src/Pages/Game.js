@@ -32,7 +32,7 @@ const ErrorToast = (error) =>
 	});
 
 	useEffect(() => {
-		let tempSock = io("http://localhost:5000");
+		let tempSock = io(process.env.REACT_APP_API_URL);
 		tempSock.emit("setup",userInfo);
 		setSocket(tempSock);
 	}, []);
