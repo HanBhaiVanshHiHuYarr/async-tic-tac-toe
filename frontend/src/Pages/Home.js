@@ -33,7 +33,10 @@ function Home() {
 	useEffect(() => {
 		if (socket) {
 			socket.on("newgamecreated", (minigame) => {
-				setGames([...games, minigame]);
+				if (minigame.player2 == data.username) {
+					setGames([...games, minigame]);
+				}
+				
 			});
 		}
 	});
