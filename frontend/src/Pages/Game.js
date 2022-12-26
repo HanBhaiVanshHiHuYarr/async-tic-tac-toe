@@ -142,13 +142,7 @@ function Game() {
 			.put(process.env.REACT_APP_API_URL + "/creategame", finaldata)
 			.then((response) => {
 				setData(finaldata);
-				setText(() => {
-					if (finaldata.turn == userInfo.username) {
-						return `Your Turn`;
-					} else {
-						return `Opponent's Turn `;
-					}
-				});
+				setText("Opponent Turn");
 				successToast("Game reseted successfully");
 				socket.emit("new message", finaldata);
 			})
