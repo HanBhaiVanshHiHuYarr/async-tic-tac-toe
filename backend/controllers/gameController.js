@@ -38,7 +38,6 @@ const createController = asyncHandler(async (req, res) => {
 		winner: "",
 	});
 	if (createdGame) {
-		
 		res.status(200).json(createdGame);
 	} else {
 		res.status(400);
@@ -50,7 +49,7 @@ const updateController = asyncHandler(async (req, res) => {
 	const singleGame = req.body;
 	let old = await Game.findOneAndUpdate({ _id: singleGame._id }, singleGame);
 	if (old) {
-		res.status(200);
+		res.status(200).send("Game updated");
 	} else {
 		res.status(400);
 		throw new Error("Game not updated");

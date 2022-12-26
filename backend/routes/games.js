@@ -5,6 +5,7 @@ const gameController = require('../controllers/gameController')
 
 router.get('/home/:username',gameController.allusers)
 router.post('/creategame', gameController.createController)
+router.put("/creategame", gameController.updateController);
 router.put('/updategame', gameController.updateController)
 
 module.exports = router;

@@ -13,27 +13,27 @@ function Game() {
 
 	const [socket, setSocket] = useState(null);
 	const [data, setData] = useState(state);
-const successToast = (msg) =>
-	toast.success(msg, {
-		position: "bottom-center",
-		autoClose: 1000,
-		hideProgressBar: false,
-		closeOnClick: true,
-		theme: "light",
-	});
+	const successToast = (msg) =>
+		toast.success(msg, {
+			position: "bottom-center",
+			autoClose: 1000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			theme: "light",
+		});
 
-const ErrorToast = (error) =>
-	toast.error(error, {
-		position: "bottom-center",
-		autoClose: 1000,
-		hideProgressBar: false,
-		closeOnClick: true,
-		theme: "light",
-	});
+	const ErrorToast = (error) =>
+		toast.error(error, {
+			position: "bottom-center",
+			autoClose: 1000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			theme: "light",
+		});
 
 	useEffect(() => {
 		let tempSock = io(process.env.REACT_APP_API_URL);
-		tempSock.emit("setup",userInfo);
+		tempSock.emit("setup", userInfo);
 		setSocket(tempSock);
 	}, []);
 
@@ -42,9 +42,8 @@ const ErrorToast = (error) =>
 			socket.on("message received", (newMessageReceived) => {
 				setData(newMessageReceived);
 			});
-			
 		}
-	})
+	});
 
 	useEffect(() => {
 		if (socket) {
@@ -71,12 +70,11 @@ const ErrorToast = (error) =>
 		}
 
 		if (data?.winner != "") {
-			successToast(`${data.winner} wins !!`)
+			successToast(`${data.winner} wins !!`);
 			setTurn(false);
 			setText(data.winner + " wins!");
-			setPlace("")
+			setPlace("");
 		}
-
 	}, [data]);
 
 	const [text, setText] = useState("Your Turn");
@@ -121,6 +119,37 @@ const ErrorToast = (error) =>
 			axios.put(process.env.REACT_APP_API_URL + `/updategame`, finaldata);
 			socket.emit("new message", finaldata);
 		}
+	};
+
+	const handleReset = () => {
+		const finaldata = {
+			...data,
+			player1: data.player1,
+			player2: data.player2,
+			turn: data.turn,
+			b1: "",
+			b2: "",
+			b3: "",
+			b4: "",
+			b5: "",
+			b6: "",
+			b7: "",
+			b8: "",
+			b9: "",
+			winner: "",
+		};
+		axios
+			.put(process.env.REACT_APP_API_URL + "/creategame", finaldata)
+			.then((response) => {
+				setData(finaldata);
+
+				successToast("Game reseted successfully");
+				socket.emit("new message", finaldata);
+			})
+			.catch((error) => {
+				// console.log(error.response)
+				ErrorToast(error.response.data.message);
+			});
 	};
 
 	const checkWinner = (finaldata) => {
@@ -248,11 +277,20 @@ const ErrorToast = (error) =>
 					</div>
 				</div>
 			</div>
-			<button
-				className='drop-shadow-md text-xl text-white bg-yellow-400 p-3 rounded-md mb-2'
-				onClick={handleSubmit}>
-				Submit
-			</button>
+
+			{data?.winner != "" ? (
+				<button
+					className='drop-shadow-md text-xl text-white bg-pink-400 p-3 rounded-md mb-2'
+					onClick={handleReset}>
+					Reset Game ?
+				</button>
+			) : (
+				<button
+					className='drop-shadow-md text-xl text-white bg-yellow-400 p-3 rounded-md mb-2'
+					onClick={handleSubmit}>
+					Submit
+				</button>
+			)}
 		</div>
 	);
 }

@@ -45,8 +45,6 @@ function Modal({ setIsVisible, setGame }) {
 				b9: "",
 				winner: "",
 			};
-
-			
 			axios
 				.post(process.env.REACT_APP_API_URL + "/creategame", finaldata)
 				.then((response) => {

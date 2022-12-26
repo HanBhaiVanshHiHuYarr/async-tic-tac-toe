@@ -36,7 +36,6 @@ function Home() {
 				if (minigame.player2 == data.username) {
 					setGames([...games, minigame]);
 				}
-				
 			});
 		}
 	});
