@@ -17,7 +17,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
 	cors: {
-		origin: ["http://localhost:3000"],
+		origin: ["https://async-tic-tac-toe-two.vercel.app/"],
 	},
 });
 //config
@@ -57,4 +57,4 @@ io.on("connection", (socket) => {
     
 });
 
-httpServer.listen(port, console.log("Server running on 5000".bgYellow.bold));
+httpServer.listen(port, console.log(`Server running on ${PORT}`.bgYellow.bold));
