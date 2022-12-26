@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-function Modal({ setIsVisible }) {
+function Modal({ setIsVisible, setGame }) {
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 	const successToast = (data) =>
@@ -46,16 +46,17 @@ function Modal({ setIsVisible }) {
 				winner: "",
 			};
 
+			
 			axios
 				.post(process.env.REACT_APP_API_URL + "/creategame", finaldata)
 				.then((response) => {
-					// console.log(response);
+					setGame(response.data)
 					successToast("Game created successfully");
 					setIsVisible(false);
 					navigate("/home");
 				})
 				.catch((error) => {
-					// console.log(error.response.data.message)
+					// console.log(error.response)
 					ErrorToast(error.response.data.message);
 				});
 		}

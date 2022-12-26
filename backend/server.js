@@ -17,7 +17,9 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
 	cors: {
+		// origin: "http://localhost:3000",
 		origin: "https://async-tic-tac-toe-two.vercel.app",
+
 		methods: ["GET", "POST", "PUT"],
 	},
 });
@@ -39,6 +41,11 @@ app.use(notFound);
 app.use(errorHandler);
 
 io.on("connection", (socket) => {
+	socket.on("newgame", (player2) => {
+		// socket.emit("newgamecreated", player2);
+		socket.broadcast.emit("newgamecreated", player2);
+	});
+
 	socket.on("setup", (userData) => {
 		socket.join(userData.username);
 		socket.emit("connected" + userData.username);
@@ -46,7 +53,6 @@ io.on("connection", (socket) => {
 
 	socket.on("join room", (gameid) => {
 		socket.join(gameid);
-		console.log("user joined " + gameid);
 	});
 
 	socket.on("new message", (newMessageReceived) => {

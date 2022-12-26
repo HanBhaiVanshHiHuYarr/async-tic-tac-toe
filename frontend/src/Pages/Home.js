@@ -1,21 +1,47 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CreateGame from "../Components/CreateGame";
 import GameCard from "../Components/GameCard";
 import Modal from "../Components/Modal";
 
+const io = require("socket.io-client");
+
 function Home() {
 	const [games, setGames] = useState([]);
-	const [userData, setUserData] = useState({});
 	const [isVisible, setIsVisible] = useState(false);
+	const [game, setGame] = useState({});
+	const navigate = useNavigate();
+	let data = localStorage.getItem("userInfo");
+	data = JSON.parse(data);
+	const [socket, setSocket] = useState(null);
+
 	useEffect(() => {
-		let data = localStorage.getItem("userInfo");
-		data = JSON.parse(data);
-		setUserData(data);
+		if (data == undefined) {
+			navigate("/login");
+		}
+		let tempSock = io(process.env.REACT_APP_API_URL);
+		setSocket(tempSock);
+	}, []);
+
+	useEffect(() => {
+		if (socket) {
+			socket.emit("newgame", game);
+		}
+	}, [game]);
+
+	useEffect(() => {
+		if (socket) {
+			socket.on("newgamecreated", (minigame) => {
+				setGames([...games, minigame]);
+			});
+		}
+	});
+
+	useEffect(() => {
 		axios
 			.get(process.env.REACT_APP_API_URL + `/home/${data.username}`)
 			.then((response) => {
-				console.log(response.data);
 				setGames(response.data);
 			});
 	}, [isVisible]);
@@ -24,7 +50,7 @@ function Home() {
 		<div className='w-screen h-full flex flex-col py-4 px-6 bg-neutral-100'>
 			<h1 className='font-bold text-neutral-800 text-4xl'>Your Games</h1>
 			<CreateGame setIsVisible={setIsVisible} />
-			{isVisible && <Modal setIsVisible={setIsVisible} />}
+			{isVisible && <Modal setIsVisible={setIsVisible} setGame={setGame} />}
 			<div className='h-full my-4 overflow-scroll'>
 				{games &&
 					games.map((singlegame) => {

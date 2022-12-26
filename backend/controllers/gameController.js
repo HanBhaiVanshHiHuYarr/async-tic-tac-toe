@@ -38,21 +38,8 @@ const createController = asyncHandler(async (req, res) => {
 		winner: "",
 	});
 	if (createdGame) {
-		res.status(200).send({
-			player1: player1,
-			player2: player2,
-			turn: player1,
-			b1: "",
-			b2: "",
-			b3: "",
-			b4: "",
-			b5: "",
-			b6: "",
-			b7: "",
-			b8: "",
-			b9: "",
-			winner: "",
-		});
+		
+		res.status(200).json(createdGame);
 	} else {
 		res.status(400);
 		throw new Error("Game not created");
